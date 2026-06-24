@@ -1,5 +1,4 @@
-import type { Metadata } from 'next'
-import './globals.css'
+﻿import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'ReportIQ',
@@ -13,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body style={{margin:0, padding:0, fontFamily:"-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"}}>{children}</body>
     </html>
   )
 }
