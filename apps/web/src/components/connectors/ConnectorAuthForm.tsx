@@ -1,4 +1,4 @@
-﻿﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -180,7 +180,7 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
         <div>
           <h2 className="text-sm font-medium text-foreground">Connect {connector.label}</h2>
           <p className="text-xs text-muted-foreground mt-0.5">
-            {isOAuth ? "You'll be redirected to authorise access" : 'Credentials stored encrypted â€” never shared'}
+            {isOAuth ? "You'll be redirected to authorise access" : 'Credentials stored encrypted — never shared'}
           </p>
         </div>
       </div>
@@ -205,7 +205,7 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
             <div className="rounded-lg border border-border bg-muted/30 p-4">
               <p className="text-xs font-medium text-foreground mb-1">How this works</p>
               <p className="text-xs text-muted-foreground leading-relaxed">{OAUTH_PROVIDERS[connector.type].description}</p>
-              <p className="text-xs text-muted-foreground mt-2">ReportIQ only requests <strong>read</strong> access â€” it never modifies your data.</p>
+              <p className="text-xs text-muted-foreground mt-2">ReportIQ only requests <strong>read</strong> access — it never modifies your data.</p>
             </div>
             {definition?.configFields?.map(f => (
               <div key={f.key}>
@@ -257,7 +257,7 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
             <button
               onClick={() => onSuccess({ connector: { type: connector.type, status: 'connected' }, testResult: { success: true, message: 'Inbound connector ready' } })}
               className="w-full h-10 bg-foreground text-background rounded-lg text-sm font-medium hover:opacity-90">
-              Done â€” connector is set up
+              Done — connector is set up
             </button>
           </div>
         )}
@@ -266,9 +266,9 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
         {isUpload && (
           <div className="space-y-4">
             <div className="rounded-lg border-2 border-dashed border-border p-8 text-center">
-              <p className="text-2xl mb-2">ðŸ“Š</p>
+              <p className="text-2xl mb-2">📊</p>
               <p className="text-sm font-medium text-foreground mb-1">Upload a file to test</p>
-              <p className="text-xs text-muted-foreground mb-4">Excel (.xlsx, .xls) or CSV â€” up to 50 MB</p>
+              <p className="text-xs text-muted-foreground mb-4">Excel (.xlsx, .xls) or CSV — up to 50 MB</p>
               <label className="px-4 py-2 rounded-lg border border-border text-sm cursor-pointer hover:bg-muted transition-colors">
                 Choose file
                 <input type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={() => {}} />
@@ -277,7 +277,7 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
             <button
               onClick={() => onSuccess({ connector: { type: 'excel_upload', status: 'connected' }, testResult: { success: true, message: 'File upload ready' } })}
               className="w-full h-10 bg-foreground text-background rounded-lg text-sm font-medium">
-              Continue â†’
+              Continue →
             </button>
           </div>
         )}
@@ -327,7 +327,7 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
             ))}
 
             <div className="flex items-start gap-2 rounded-lg bg-muted/40 px-3 py-2.5">
-              <span className="text-sm mt-0.5">ðŸ”’</span>
+              <span className="text-sm mt-0.5">🔒</span>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 All credentials are encrypted with AES-256-GCM before storage. Never logged, never returned in plain text.
               </p>
@@ -343,7 +343,7 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
             <button type="submit" disabled={submitting}
               className="w-full h-10 bg-foreground text-background rounded-lg text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-50">
               {submitting && <Loader2 size={14} className="animate-spin" />}
-              {submitting ? 'Testing connectionâ€¦' : 'Connect & test â†’'}
+              {submitting ? 'Testing connection…' : 'Connect & test →'}
             </button>
           </form>
         )}
@@ -352,5 +352,3 @@ export function ConnectorAuthForm({ connector, onBack, onSuccess }: ConnectorAut
     </div>
   )
 }
-
-

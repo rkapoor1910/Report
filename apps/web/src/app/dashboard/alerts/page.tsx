@@ -1,4 +1,4 @@
-﻿﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -6,12 +6,12 @@ import { AlertTriangle, CheckCircle2, Info, Clock, ChevronRight, Filter, Search 
 import { cn } from '@/lib/utils'
 
 const ALERTS = [
-  { id: '1', title: 'Adidas stock running critically low',              report: 'ðŸ“¦ Stock inventory',       severity: 'critical', time: '2h ago',   summary: '3 SKUs below reorder level. Ultraboost 22, Classic White Women, Stan Smith. Combined risk: â‚¹4.2L lost sales if not restocked by weekend.', delivered: ['whatsapp','email'], actions: ['Raise PO with Adidas today', 'Check alternate warehouse stock', 'Alert store managers to manage customer expectations'] },
-  { id: '2', title: 'Lajpat Nagar missed target 4 days running',        report: 'ðŸŽ¯ Target vs actual',      severity: 'critical', time: '8h ago',   summary: 'Store is at 61% of weekly target. Footfall is normal but conversion is low â€” 3 top SKUs out of stock since Tuesday.', delivered: ['whatsapp'], actions: ['Request emergency replenishment from warehouse', 'Verify stock transfer is logged in system'] },
-  { id: '3', title: 'Reebok Hexalite dead stock â€” â‚¹8.5L idle 47 days', report: 'ðŸ“¦ Stock inventory',       severity: 'warning',  time: '1d ago',   summary: '340 units of Reebok Hexalite Grey have not moved in 47 days. Last season model. Carrying cost increasing.', delivered: ['email'], actions: ['Run clearance promotion this weekend', 'Request brand return authorisation from Reebok'] },
-  { id: '4', title: 'Weekly sell-out summary â€” Week 24',                report: 'ðŸ›ï¸ Retailer sell-out',    severity: 'info',     time: '1d ago',   summary: 'Total sell-out â‚¹1.84 Cr â€” up 11% vs last week. Adidas Delhi NCR outperformed by 22%. Tanishq Lucknow the weakest at 34% below target.', delivered: ['whatsapp','email','slack'], actions: [] },
-  { id: '5', title: 'Kanpur franchise returns spike',                   report: 'â†©ï¸ Returns & defects',    severity: 'warning',  time: '2d ago',   summary: 'Return rate jumped to 8.4% this week â€” double normal. Top return reason: size mismatch (62%). Possible fit issue with new Adidas batch.', delivered: ['whatsapp'], actions: ['Contact Adidas quality team', 'Pull batch QC report', 'Brief store staff on fit guide'] },
-  { id: '6', title: 'Brand PO target achievement â€” Q2 update',          report: 'ðŸ“‹ Purchase orders',      severity: 'info',     time: '3d ago',   summary: 'Q2 at 87% of brand targets. Adidas on track. Tanishq 14% behind â€” festive inventory build needed by July.', delivered: ['email'], actions: ['Plan Tanishq pre-festive order', 'Review Adidas Q3 forecast'] },
+  { id: '1', title: 'Adidas stock running critically low',              report: '📦 Stock inventory',       severity: 'critical', time: '2h ago',   summary: '3 SKUs below reorder level. Ultraboost 22, Classic White Women, Stan Smith. Combined risk: ₹4.2L lost sales if not restocked by weekend.', delivered: ['whatsapp','email'], actions: ['Raise PO with Adidas today', 'Check alternate warehouse stock', 'Alert store managers to manage customer expectations'] },
+  { id: '2', title: 'Lajpat Nagar missed target 4 days running',        report: '🎯 Target vs actual',      severity: 'critical', time: '8h ago',   summary: 'Store is at 61% of weekly target. Footfall is normal but conversion is low — 3 top SKUs out of stock since Tuesday.', delivered: ['whatsapp'], actions: ['Request emergency replenishment from warehouse', 'Verify stock transfer is logged in system'] },
+  { id: '3', title: 'Reebok Hexalite dead stock — ₹8.5L idle 47 days', report: '📦 Stock inventory',       severity: 'warning',  time: '1d ago',   summary: '340 units of Reebok Hexalite Grey have not moved in 47 days. Last season model. Carrying cost increasing.', delivered: ['email'], actions: ['Run clearance promotion this weekend', 'Request brand return authorisation from Reebok'] },
+  { id: '4', title: 'Weekly sell-out summary — Week 24',                report: '🛍️ Retailer sell-out',    severity: 'info',     time: '1d ago',   summary: 'Total sell-out ₹1.84 Cr — up 11% vs last week. Adidas Delhi NCR outperformed by 22%. Tanishq Lucknow the weakest at 34% below target.', delivered: ['whatsapp','email','slack'], actions: [] },
+  { id: '5', title: 'Kanpur franchise returns spike',                   report: '↩️ Returns & defects',    severity: 'warning',  time: '2d ago',   summary: 'Return rate jumped to 8.4% this week — double normal. Top return reason: size mismatch (62%). Possible fit issue with new Adidas batch.', delivered: ['whatsapp'], actions: ['Contact Adidas quality team', 'Pull batch QC report', 'Brief store staff on fit guide'] },
+  { id: '6', title: 'Brand PO target achievement — Q2 update',          report: '📋 Purchase orders',      severity: 'info',     time: '3d ago',   summary: 'Q2 at 87% of brand targets. Adidas on track. Tanishq 14% behind — festive inventory build needed by July.', delivered: ['email'], actions: ['Plan Tanishq pre-festive order', 'Review Adidas Q3 forecast'] },
 ]
 
 const SEV = {
@@ -20,7 +20,7 @@ const SEV = {
   info:     { icon: Info,          color: 'text-blue-600',  bg: 'bg-blue-50',  border: 'border-blue-200',  dot: 'bg-blue-500' },
 }
 
-const CH: Record<string, string> = { whatsapp: 'ðŸ’¬ WhatsApp', email: 'ðŸ“§ Email', slack: 'ðŸ”· Slack', sms: 'ðŸ“± SMS' }
+const CH: Record<string, string> = { whatsapp: '💬 WhatsApp', email: '📧 Email', slack: '🔷 Slack', sms: '📱 SMS' }
 
 export default function AlertsPage() {
   const [filter, setFilter]   = useState<'all' | 'critical' | 'warning' | 'info'>('all')
@@ -47,7 +47,7 @@ export default function AlertsPage() {
             <Search size={13} className="text-muted-foreground shrink-0" />
             <input
               type="text"
-              placeholder="Search alertsâ€¦"
+              placeholder="Search alerts…"
               value={search}
               onChange={e => setSearch(e.target.value)}
               className="flex-1 bg-transparent text-xs outline-none placeholder:text-muted-foreground"
@@ -108,7 +108,7 @@ export default function AlertsPage() {
               onClick={() => setSelected(null)}
               className="lg:hidden text-xs text-muted-foreground mb-4 flex items-center gap-1 hover:text-foreground"
             >
-              â† Back to alerts
+              ← Back to alerts
             </button>
 
             {(() => {
@@ -120,7 +120,7 @@ export default function AlertsPage() {
                     {selectedAlert.severity.charAt(0).toUpperCase() + selectedAlert.severity.slice(1)}
                   </div>
                   <h1 className="text-base font-semibold text-foreground mb-1">{selectedAlert.title}</h1>
-                  <p className="text-xs text-muted-foreground mb-5">{selectedAlert.report} Â· {selectedAlert.time}</p>
+                  <p className="text-xs text-muted-foreground mb-5">{selectedAlert.report} · {selectedAlert.time}</p>
 
                   <div className="bg-muted/30 rounded-xl border border-border p-4 mb-4">
                     <p className="text-sm text-foreground leading-relaxed">{selectedAlert.summary}</p>
@@ -165,5 +165,3 @@ export default function AlertsPage() {
     </div>
   )
 }
-
-

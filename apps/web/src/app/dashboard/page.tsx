@@ -1,4 +1,4 @@
-﻿﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -8,7 +8,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// â”€â”€ Sample data (replaced by API calls in production) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Sample data (replaced by API calls in production) ────────────────────────
 
 const STATS = [
   { label: 'Active connectors', value: '4',   sub: '2 syncing now',              icon: Plug,       color: 'text-blue-600',   bg: 'bg-blue-50' },
@@ -21,7 +21,7 @@ const RECENT_ALERTS = [
   {
     id: '1',
     title: 'Adidas stock running critically low',
-    report: 'ðŸ“¦ Stock inventory â€” Delhi warehouse',
+    report: '📦 Stock inventory — Delhi warehouse',
     severity: 'critical',
     time: '2 hours ago',
     delivered: ['whatsapp', 'email'],
@@ -29,23 +29,23 @@ const RECENT_ALERTS = [
   {
     id: '2',
     title: 'Lajpat Nagar store missed target 4 days running',
-    report: 'ðŸŽ¯ Target vs actual â€” Delhi NCR',
+    report: '🎯 Target vs actual — Delhi NCR',
     severity: 'warning',
     time: '8 hours ago',
     delivered: ['whatsapp'],
   },
   {
     id: '3',
-    title: 'Weekly sell-out summary â€” Week 24',
-    report: 'ðŸ›ï¸ Retailer sell-out â€” All brands',
+    title: 'Weekly sell-out summary — Week 24',
+    report: '🛍️ Retailer sell-out — All brands',
     severity: 'info',
     time: '1 day ago',
     delivered: ['whatsapp', 'email', 'slack'],
   },
   {
     id: '4',
-    title: 'Reebok Hexalite dead stock alert â€” â‚¹8.5L idle',
-    report: 'ðŸ“¦ Stock inventory â€” Delhi warehouse',
+    title: 'Reebok Hexalite dead stock alert — ₹8.5L idle',
+    report: '📦 Stock inventory — Delhi warehouse',
     severity: 'warning',
     time: '2 days ago',
     delivered: ['email'],
@@ -59,13 +59,13 @@ const SEVERITY_CONFIG = {
 }
 
 const CHANNEL_LABEL: Record<string, string> = {
-  whatsapp: 'ðŸ’¬',
-  email:    'ðŸ“§',
-  slack:    'ðŸ’¬',
-  sms:      'ðŸ“±',
+  whatsapp: '💬',
+  email:    '📧',
+  slack:    '💬',
+  sms:      '📱',
 }
 
-// â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Page ─────────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
   return (
@@ -120,7 +120,7 @@ export default function DashboardPage() {
                       <span className="text-[11px] text-muted-foreground flex items-center gap-1">
                         <Clock size={10} /> {alert.time}
                       </span>
-                      <span className="text-[11px] text-muted-foreground">Â·</span>
+                      <span className="text-[11px] text-muted-foreground">·</span>
                       <span className="text-[11px] text-muted-foreground">
                         {alert.delivered.map(ch => CHANNEL_LABEL[ch] ?? ch).join(' ')}
                       </span>
@@ -194,5 +194,3 @@ export default function DashboardPage() {
     </div>
   )
 }
-
-

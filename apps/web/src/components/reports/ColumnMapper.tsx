@@ -1,10 +1,10 @@
-﻿﻿'use client'
+'use client'
 
 import { useState, useEffect } from 'react'
 import { Loader2, Wand2, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Types ──────────────────────────────────────────────────────────────────
 
 interface ColumnMapping {
   originalName: string
@@ -34,13 +34,13 @@ interface ColumnMapperProps {
   }) => void
 }
 
-// â”€â”€â”€ Role config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Role config ─────────────────────────────────────────────────────────────
 
 const ROLES: Array<{ value: ColumnMapping['role']; label: string; description: string; color: string }> = [
-  { value: 'metric',    label: 'Metric',    description: 'A number to track â€” revenue, units, count', color: 'bg-blue-50 text-blue-700 border-blue-200' },
-  { value: 'dimension', label: 'Dimension', description: 'A category to group by â€” brand, store, SKU', color: 'bg-purple-50 text-purple-700 border-purple-200' },
+  { value: 'metric',    label: 'Metric',    description: 'A number to track — revenue, units, count', color: 'bg-blue-50 text-blue-700 border-blue-200' },
+  { value: 'dimension', label: 'Dimension', description: 'A category to group by — brand, store, SKU', color: 'bg-purple-50 text-purple-700 border-purple-200' },
   { value: 'date',      label: 'Date',      description: 'A date or time field',                       color: 'bg-amber-50 text-amber-700 border-amber-200' },
-  { value: 'id',        label: 'ID',        description: 'A unique identifier â€” SKU code, order ID',   color: 'bg-slate-50 text-slate-600 border-slate-200' },
+  { value: 'id',        label: 'ID',        description: 'A unique identifier — SKU code, order ID',   color: 'bg-slate-50 text-slate-600 border-slate-200' },
   { value: 'ignore',    label: 'Ignore',    description: 'Skip this column',                           color: 'bg-gray-50 text-gray-400 border-gray-200' },
 ]
 
@@ -52,7 +52,7 @@ const ROLE_BADGE: Record<ColumnMapping['role'], string> = {
   ignore:    'bg-gray-50 text-gray-400',
 }
 
-// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Component ──────────────────────────────────────────────────────────────
 
 export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDone }: ColumnMapperProps) {
   const [preview, setPreview]     = useState<ReportPreview | null>(null)
@@ -72,7 +72,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
         const data: ReportPreview = await res.json()
         setPreview(data)
 
-        // Initialise mappings â€” apply AI suggestions if available
+        // Initialise mappings — apply AI suggestions if available
         const initial: ColumnMapping[] = data.columns.map(col => {
           const suggested = data.suggestedMappings[col]
           return {
@@ -120,7 +120,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
     return (
       <div className="flex flex-col items-center justify-center h-80 gap-3">
         <Loader2 size={20} className="animate-spin text-muted-foreground" />
-        <p className="text-xs text-muted-foreground">Loading data previewâ€¦</p>
+        <p className="text-xs text-muted-foreground">Loading data preview…</p>
       </div>
     )
   }
@@ -129,7 +129,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
     return (
       <div className="p-8 text-center">
         <p className="text-sm text-muted-foreground">Could not load preview. Please check the connector and try again.</p>
-        <button onClick={onBack} className="mt-4 text-sm underline text-muted-foreground">â† Go back</button>
+        <button onClick={onBack} className="mt-4 text-sm underline text-muted-foreground">← Go back</button>
       </div>
     )
   }
@@ -140,7 +140,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
       {/* Header */}
       <div className="px-5 py-4 border-b border-border">
         <h2 className="text-sm font-medium text-foreground">Map your columns</h2>
-        <p className="text-xs text-muted-foreground mt-0.5">{reportName} Â· {preview.totalRows?.toLocaleString()} rows</p>
+        <p className="text-xs text-muted-foreground mt-0.5">{reportName} · {preview.totalRows?.toLocaleString()} rows</p>
       </div>
 
       <div className="px-5 py-4 space-y-5">
@@ -173,7 +173,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
                     <tr key={i} className="border-b border-border last:border-0">
                       {preview.columns.map(col => (
                         <td key={col} className="px-3 py-2 text-foreground whitespace-nowrap max-w-[140px] truncate">
-                          {String(row[col] ?? 'â€”')}
+                          {String(row[col] ?? '—')}
                         </td>
                       ))}
                     </tr>
@@ -256,7 +256,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
               onChange={e => setDateColumn(e.target.value)}
               className="w-full h-9 px-3 rounded-lg border border-border bg-background text-xs outline-none"
             >
-              <option value="">Selectâ€¦</option>
+              <option value="">Select…</option>
               {mappings.filter(m => m.role === 'date').map(m => (
                 <option key={m.originalName} value={m.originalName}>{m.originalName}</option>
               ))}
@@ -271,7 +271,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
               onChange={e => setPrimaryMetric(e.target.value)}
               className="w-full h-9 px-3 rounded-lg border border-border bg-background text-xs outline-none"
             >
-              <option value="">Selectâ€¦</option>
+              <option value="">Select…</option>
               {mappings.filter(m => m.role === 'metric').map(m => (
                 <option key={m.originalName} value={m.originalName}>{m.originalName}</option>
               ))}
@@ -284,7 +284,7 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
 
       {/* Footer */}
       <div className="px-5 py-4 border-t border-border flex items-center justify-between bg-muted/20">
-        <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">â† Back</button>
+        <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">← Back</button>
         <button
           disabled={!canContinue}
           onClick={handleDone}
@@ -293,12 +293,10 @@ export function ColumnMapper({ connectorId, sourceRef, reportName, onBack, onDon
             canContinue ? 'bg-foreground text-background hover:opacity-90' : 'bg-muted text-muted-foreground cursor-not-allowed'
           )}
         >
-          Set alert thresholds â†’
+          Set alert thresholds →
         </button>
       </div>
 
     </div>
   )
 }
-
-

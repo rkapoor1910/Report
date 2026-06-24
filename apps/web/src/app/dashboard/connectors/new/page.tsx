@@ -1,4 +1,4 @@
-﻿﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { SourcePicker } from '@/components/connectors/SourcePicker'
@@ -86,7 +86,7 @@ export default function NewConnectorPage() {
 
         {step === 'done' && (
           <div className="flex flex-col items-center justify-center h-[520px] gap-4 text-center px-8">
-            <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl">âœ…</div>
+            <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-2xl">✅</div>
             <h2 className="text-base font-medium text-foreground">Connector added successfully</h2>
             <p className="text-sm text-muted-foreground max-w-xs">
               {selectedConnector?.label} is now connected. Configure which reports to monitor next.
@@ -95,7 +95,7 @@ export default function NewConnectorPage() {
               href="/dashboard/reports/new"
               className="mt-2 px-5 py-2 bg-foreground text-background rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
             >
-              Configure reports â†’
+              Configure reports →
             </a>
           </div>
         )}
@@ -104,5 +104,3 @@ export default function NewConnectorPage() {
     </div>
   )
 }
-
-

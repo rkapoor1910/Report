@@ -1,4 +1,4 @@
-﻿﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import { CheckCircle2, Eye, EyeOff, Copy, RefreshCw } from 'lucide-react'
@@ -50,10 +50,10 @@ export default function SettingsPage() {
       <Section title="Default delivery settings">
         <Field label="Default alert channel">
           <select defaultValue="whatsapp" className={input}>
-            <option value="whatsapp">ðŸ’¬ WhatsApp</option>
-            <option value="email">ðŸ“§ Email</option>
-            <option value="sms">ðŸ“± SMS</option>
-            <option value="slack">ðŸ”· Slack</option>
+            <option value="whatsapp">💬 WhatsApp</option>
+            <option value="email">📧 Email</option>
+            <option value="sms">📱 SMS</option>
+            <option value="slack">🔷 Slack</option>
           </select>
         </Field>
         <Field label="Default frequency">
@@ -76,10 +76,10 @@ export default function SettingsPage() {
       {/* WhatsApp / SMS */}
       <Section title="WhatsApp & SMS (Twilio)">
         <Field label="Twilio Account SID">
-          <input type="password" placeholder="ACâ€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" className={input} />
+          <input type="password" placeholder="AC••••••••••••••••••••••••••••••••" className={input} />
         </Field>
         <Field label="Twilio Auth Token">
-          <input type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" className={input} />
+          <input type="password" placeholder="••••••••••••••••••••••••••••••••" className={input} />
         </Field>
         <Field label="WhatsApp sender number">
           <input type="text" placeholder="whatsapp:+14155238886" className={input} />
@@ -93,7 +93,7 @@ export default function SettingsPage() {
       {/* Email */}
       <Section title="Email (SendGrid)">
         <Field label="SendGrid API key">
-          <input type="password" placeholder="SG.â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" className={input} />
+          <input type="password" placeholder="SG.••••••••••••••••••••••••••••" className={input} />
         </Field>
         <Field label="From email">
           <input type="email" defaultValue="alerts@reportiq.com" className={input} />
@@ -107,7 +107,7 @@ export default function SettingsPage() {
       {/* Slack */}
       <Section title="Slack">
         <Field label="Bot token">
-          <input type="password" placeholder="xoxb-â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" className={input} />
+          <input type="password" placeholder="xoxb-••••••••••••••••••••••••••" className={input} />
         </Field>
         <Field label="Default channel">
           <input type="text" defaultValue="#reportiq-alerts" className={input} />
@@ -120,7 +120,7 @@ export default function SettingsPage() {
         <p className="text-xs text-muted-foreground mb-3">Use this key to push data via the SDK or Push API connector.</p>
         <div className="flex items-center gap-2 bg-muted border border-border rounded-lg px-3 py-2.5">
           <code className="text-xs flex-1 text-foreground font-mono">
-            {showKey ? apiKey : 'riq_live_' + 'â€¢'.repeat(28)}
+            {showKey ? apiKey : 'riq_live_' + '•'.repeat(28)}
           </code>
           <button onClick={() => setShowKey(v => !v)} className="text-muted-foreground hover:text-foreground">
             {showKey ? <EyeOff size={13} /> : <Eye size={13} />}
@@ -141,7 +141,7 @@ export default function SettingsPage() {
   )
 }
 
-// â”€â”€ Sub-components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Sub-components ────────────────────────────────────────────────────────────
 
 const input = 'w-full h-9 px-3 rounded-lg border border-border bg-background text-sm outline-none focus:ring-1 focus:ring-foreground/30'
 
@@ -175,5 +175,3 @@ function SaveBtn({ saved, onClick }: { saved: boolean; onClick: () => void }) {
     </button>
   )
 }
-
-
