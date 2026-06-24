@@ -1,15 +1,15 @@
-'use client'
+﻿﻿'use client'
 
 import { useState } from 'react'
 import { Plus, Trash2, Bell, BellOff, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const REPORTS = [
-  { id: 'r1', name: '📦 Stock inventory — Delhi warehouse',    type: 'stock_inventory' },
-  { id: 'r2', name: '🛍️ Retailer sell-out — All brands',     type: 'sell_out' },
-  { id: 'r3', name: '🎯 Target vs actual — Delhi NCR',         type: 'target_actual' },
-  { id: 'r4', name: '🚚 Dispatch & logistics',                 type: 'dispatch_logistics' },
-  { id: 'r5', name: '↩️ Returns & defects',                   type: 'returns_defects' },
+  { id: 'r1', name: 'ðŸ“¦ Stock inventory â€” Delhi warehouse',    type: 'stock_inventory' },
+  { id: 'r2', name: 'ðŸ›ï¸ Retailer sell-out â€” All brands',     type: 'sell_out' },
+  { id: 'r3', name: 'ðŸŽ¯ Target vs actual â€” Delhi NCR',         type: 'target_actual' },
+  { id: 'r4', name: 'ðŸšš Dispatch & logistics',                 type: 'dispatch_logistics' },
+  { id: 'r5', name: 'â†©ï¸ Returns & defects',                   type: 'returns_defects' },
 ]
 
 const TEAM = [
@@ -21,10 +21,10 @@ const TEAM = [
 ]
 
 const CHANNELS = [
-  { value: 'whatsapp', label: '💬 WhatsApp' },
-  { value: 'sms',      label: '📱 SMS' },
-  { value: 'email',    label: '📧 Email' },
-  { value: 'slack',    label: '🔷 Slack' },
+  { value: 'whatsapp', label: 'ðŸ’¬ WhatsApp' },
+  { value: 'sms',      label: 'ðŸ“± SMS' },
+  { value: 'email',    label: 'ðŸ“§ Email' },
+  { value: 'slack',    label: 'ðŸ”· Slack' },
 ]
 
 const FREQUENCIES = [
@@ -128,7 +128,7 @@ export default function SubscriptionsPage() {
                 onChange={e => setNewSub(p => ({ ...p, userId: e.target.value }))}
                 className="w-full h-8 px-2 rounded-lg border border-border bg-background text-xs outline-none"
               >
-                <option value="">Select…</option>
+                <option value="">Selectâ€¦</option>
                 {TEAM.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
               </select>
             </div>
@@ -139,7 +139,7 @@ export default function SubscriptionsPage() {
                 onChange={e => setNewSub(p => ({ ...p, reportId: e.target.value }))}
                 className="w-full h-8 px-2 rounded-lg border border-border bg-background text-xs outline-none"
               >
-                <option value="">Select…</option>
+                <option value="">Selectâ€¦</option>
                 {REPORTS.map(r => <option key={r.id} value={r.id}>{r.name}</option>)}
               </select>
             </div>
@@ -217,11 +217,11 @@ export default function SubscriptionsPage() {
                         <p className="text-xs font-medium text-foreground truncate">{report?.name ?? sub.reportId}</p>
                         <div className="flex items-center gap-2 mt-0.5">
                           <span className="text-[11px] text-muted-foreground">{ch?.label ?? sub.channel}</span>
-                          <span className="text-[11px] text-muted-foreground">·</span>
+                          <span className="text-[11px] text-muted-foreground">Â·</span>
                           <span className="text-[11px] text-muted-foreground">{freq?.label ?? sub.frequency}</span>
                           {sub.frequency !== 'realtime' && (
                             <>
-                              <span className="text-[11px] text-muted-foreground">·</span>
+                              <span className="text-[11px] text-muted-foreground">Â·</span>
                               <span className="text-[11px] text-muted-foreground">{sub.time}</span>
                             </>
                           )}
@@ -268,3 +268,5 @@ export default function SubscriptionsPage() {
     </div>
   )
 }
+
+

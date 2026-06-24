@@ -1,11 +1,11 @@
-'use client'
+﻿﻿'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
 import { Zap, ArrowRight, Check, AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// ── Sample state (replaced by API in production) ──────────────────────────────
+// â”€â”€ Sample state (replaced by API in production) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const CURRENT_PLAN = {
   id:          'starter',
@@ -23,9 +23,9 @@ const USAGE = [
 ]
 
 const INVOICES = [
-  { date: '1 Jun 2024', amount: '₹29', status: 'paid',   description: 'Starter plan — Jun 2024' },
-  { date: '1 May 2024', amount: '₹29', status: 'paid',   description: 'Starter plan — May 2024' },
-  { date: '1 Apr 2024', amount: '₹0',  status: 'trial',  description: '14-day trial' },
+  { date: '1 Jun 2024', amount: 'â‚¹29', status: 'paid',   description: 'Starter plan â€” Jun 2024' },
+  { date: '1 May 2024', amount: 'â‚¹29', status: 'paid',   description: 'Starter plan â€” May 2024' },
+  { date: '1 Apr 2024', amount: 'â‚¹0',  status: 'trial',  description: '14-day trial' },
 ]
 
 export default function BillingPage() {
@@ -71,7 +71,7 @@ export default function BillingPage() {
               </span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">
-              ₹{CURRENT_PLAN.price}/month · Renews {CURRENT_PLAN.renewsAt}
+              â‚¹{CURRENT_PLAN.price}/month Â· Renews {CURRENT_PLAN.renewsAt}
             </p>
           </div>
           <div className="flex gap-2">
@@ -86,7 +86,7 @@ export default function BillingPage() {
               disabled={upgrading}
               className="text-xs px-3 py-1.5 rounded-lg bg-foreground text-background hover:opacity-90 disabled:opacity-50 flex items-center gap-1"
             >
-              {upgrading ? 'Loading…' : <><Zap size={11} /> Upgrade</>}
+              {upgrading ? 'Loadingâ€¦' : <><Zap size={11} /> Upgrade</>}
             </button>
           </div>
         </div>
@@ -102,7 +102,7 @@ export default function BillingPage() {
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-xs text-muted-foreground">{item.label}</span>
                   <span className={cn('text-xs font-medium', atLimit ? 'text-red-600' : 'text-foreground')}>
-                    {item.used} / {item.limit === -1 ? '∞' : item.limit}
+                    {item.used} / {item.limit === -1 ? 'âˆž' : item.limit}
                   </span>
                 </div>
                 <div className="h-1.5 bg-muted rounded-full overflow-hidden">
@@ -129,7 +129,7 @@ export default function BillingPage() {
             onClick={handleUpgrade}
             className="text-xs font-medium px-3 py-1.5 rounded-lg bg-amber-600 text-white hover:bg-amber-700 shrink-0"
           >
-            Upgrade →
+            Upgrade â†’
           </button>
         </div>
       )}
@@ -138,7 +138,7 @@ export default function BillingPage() {
       <div className="bg-foreground rounded-xl p-5 text-background">
         <div className="flex items-center gap-2 mb-1">
           <Zap size={14} />
-          <h2 className="text-sm font-semibold">Growth plan — ₹99/month</h2>
+          <h2 className="text-sm font-semibold">Growth plan â€” â‚¹99/month</h2>
         </div>
         <p className="text-xs opacity-70 mb-4">Everything in Starter, plus:</p>
         <div className="grid grid-cols-2 gap-y-2 gap-x-4 mb-5">
@@ -154,7 +154,7 @@ export default function BillingPage() {
           disabled={upgrading}
           className="flex items-center gap-1.5 text-xs font-medium px-4 py-2 rounded-lg bg-background text-foreground hover:opacity-90 disabled:opacity-50"
         >
-          {upgrading ? 'Loading…' : <><ArrowRight size={12} /> Upgrade to Growth</>}
+          {upgrading ? 'Loadingâ€¦' : <><ArrowRight size={12} /> Upgrade to Growth</>}
         </button>
       </div>
 
@@ -189,3 +189,5 @@ export default function BillingPage() {
     </div>
   )
 }
+
+

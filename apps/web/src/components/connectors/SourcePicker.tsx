@@ -1,11 +1,11 @@
-'use client'
+﻿﻿'use client'
 
 import { useState, useMemo } from 'react'
 import { Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { ConnectorType, ConnectorCategory } from '@reportiq/shared-types'
+import type { ConnectorType, ConnectorCategory } from '../../types/shared'
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ConnectorDefinition {
   type: ConnectorType
@@ -17,40 +17,40 @@ interface ConnectorDefinition {
   isNew?: boolean
 }
 
-// ─── Connector catalogue ────────────────────────────────────────────────────
+// â”€â”€â”€ Connector catalogue â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const CONNECTORS: ConnectorDefinition[] = [
   // Files & email
-  { type: 'gmail',        label: 'Gmail',             category: 'files',    authMethod: 'oauth2',        icon: '✉️',  popular: true },
-  { type: 'outlook',      label: 'Outlook / M365',    category: 'files',    authMethod: 'oauth2',        icon: '📧',  popular: true },
-  { type: 'excel_upload', label: 'Excel / CSV upload', category: 'files',   authMethod: 'none',          icon: '📊',  popular: true },
-  { type: 'google_sheets',label: 'Google Sheets',     category: 'files',    authMethod: 'oauth2',        icon: '🗂️',  popular: true },
-  { type: 'sharepoint',   label: 'SharePoint',        category: 'files',    authMethod: 'oauth2',        icon: '🏢' },
-  { type: 'sftp',         label: 'SFTP / FTP',        category: 'files',    authMethod: 'sftp_key',      icon: '🖧' },
-  { type: 's3',           label: 'AWS S3 / GCS',      category: 'files',    authMethod: 'api_key',       icon: '☁️' },
+  { type: 'gmail',        label: 'Gmail',             category: 'files',    authMethod: 'oauth2',        icon: 'âœ‰ï¸',  popular: true },
+  { type: 'outlook',      label: 'Outlook / M365',    category: 'files',    authMethod: 'oauth2',        icon: 'ðŸ“§',  popular: true },
+  { type: 'excel_upload', label: 'Excel / CSV upload', category: 'files',   authMethod: 'none',          icon: 'ðŸ“Š',  popular: true },
+  { type: 'google_sheets',label: 'Google Sheets',     category: 'files',    authMethod: 'oauth2',        icon: 'ðŸ—‚ï¸',  popular: true },
+  { type: 'sharepoint',   label: 'SharePoint',        category: 'files',    authMethod: 'oauth2',        icon: 'ðŸ¢' },
+  { type: 'sftp',         label: 'SFTP / FTP',        category: 'files',    authMethod: 'sftp_key',      icon: 'ðŸ–§' },
+  { type: 's3',           label: 'AWS S3 / GCS',      category: 'files',    authMethod: 'api_key',       icon: 'â˜ï¸' },
   // Cloud
-  { type: 'shopify',      label: 'Shopify',           category: 'cloud',    authMethod: 'api_key',       icon: '🛍️',  popular: true },
-  { type: 'stripe',       label: 'Stripe',            category: 'cloud',    authMethod: 'api_key',       icon: '💳' },
-  { type: 'hubspot',      label: 'HubSpot',           category: 'cloud',    authMethod: 'oauth2',        icon: '🔶' },
-  { type: 'salesforce',   label: 'Salesforce',        category: 'cloud',    authMethod: 'oauth2',        icon: '☁️' },
-  { type: 'ga4',          label: 'Google Analytics',  category: 'cloud',    authMethod: 'oauth2',        icon: '📈' },
+  { type: 'shopify',      label: 'Shopify',           category: 'cloud',    authMethod: 'api_key',       icon: 'ðŸ›ï¸',  popular: true },
+  { type: 'stripe',       label: 'Stripe',            category: 'cloud',    authMethod: 'api_key',       icon: 'ðŸ’³' },
+  { type: 'hubspot',      label: 'HubSpot',           category: 'cloud',    authMethod: 'oauth2',        icon: 'ðŸ”¶' },
+  { type: 'salesforce',   label: 'Salesforce',        category: 'cloud',    authMethod: 'oauth2',        icon: 'â˜ï¸' },
+  { type: 'ga4',          label: 'Google Analytics',  category: 'cloud',    authMethod: 'oauth2',        icon: 'ðŸ“ˆ' },
   // Databases
-  { type: 'postgres',     label: 'PostgreSQL',        category: 'database', authMethod: 'basic',         icon: '🐘',  popular: true },
-  { type: 'mysql',        label: 'MySQL',             category: 'database', authMethod: 'basic',         icon: '🐬' },
-  { type: 'mssql',        label: 'SQL Server',        category: 'database', authMethod: 'basic',         icon: '🗄️' },
-  { type: 'mongodb',      label: 'MongoDB',           category: 'database', authMethod: 'basic',         icon: '🍃' },
-  { type: 'snowflake',    label: 'Snowflake',         category: 'database', authMethod: 'basic',         icon: '❄️' },
-  { type: 'bigquery',     label: 'BigQuery',          category: 'database', authMethod: 'api_key',       icon: '🔍' },
+  { type: 'postgres',     label: 'PostgreSQL',        category: 'database', authMethod: 'basic',         icon: 'ðŸ˜',  popular: true },
+  { type: 'mysql',        label: 'MySQL',             category: 'database', authMethod: 'basic',         icon: 'ðŸ¬' },
+  { type: 'mssql',        label: 'SQL Server',        category: 'database', authMethod: 'basic',         icon: 'ðŸ—„ï¸' },
+  { type: 'mongodb',      label: 'MongoDB',           category: 'database', authMethod: 'basic',         icon: 'ðŸƒ' },
+  { type: 'snowflake',    label: 'Snowflake',         category: 'database', authMethod: 'basic',         icon: 'â„ï¸' },
+  { type: 'bigquery',     label: 'BigQuery',          category: 'database', authMethod: 'api_key',       icon: 'ðŸ”' },
   // ERP / Legacy
-  { type: 'tally',        label: 'Tally',             category: 'erp',      authMethod: 'basic',         icon: '🧾',  popular: true },
-  { type: 'sap',          label: 'SAP',               category: 'erp',      authMethod: 'basic',         icon: '🏭' },
-  { type: 'oracle_erp',   label: 'Oracle ERP',        category: 'erp',      authMethod: 'basic',         icon: '🔴' },
-  { type: 'ms_dynamics',  label: 'MS Dynamics',       category: 'erp',      authMethod: 'oauth2',        icon: '🔷' },
+  { type: 'tally',        label: 'Tally',             category: 'erp',      authMethod: 'basic',         icon: 'ðŸ§¾',  popular: true },
+  { type: 'sap',          label: 'SAP',               category: 'erp',      authMethod: 'basic',         icon: 'ðŸ­' },
+  { type: 'oracle_erp',   label: 'Oracle ERP',        category: 'erp',      authMethod: 'basic',         icon: 'ðŸ”´' },
+  { type: 'ms_dynamics',  label: 'MS Dynamics',       category: 'erp',      authMethod: 'oauth2',        icon: 'ðŸ”·' },
   // Custom
-  { type: 'webhook',      label: 'Webhook receiver',  category: 'custom',   authMethod: 'webhook_token', icon: '🔗', isNew: true },
-  { type: 'push_api',     label: 'Push API',          category: 'custom',   authMethod: 'api_key',       icon: '📡', isNew: true },
-  { type: 'sdk',          label: 'SDK / code',        category: 'custom',   authMethod: 'api_key',       icon: '💻', isNew: true },
-  { type: 'kafka',        label: 'Kafka / Kinesis',   category: 'custom',   authMethod: 'basic',         icon: '⚡' },
+  { type: 'webhook',      label: 'Webhook receiver',  category: 'custom',   authMethod: 'webhook_token', icon: 'ðŸ”—', isNew: true },
+  { type: 'push_api',     label: 'Push API',          category: 'custom',   authMethod: 'api_key',       icon: 'ðŸ“¡', isNew: true },
+  { type: 'sdk',          label: 'SDK / code',        category: 'custom',   authMethod: 'api_key',       icon: 'ðŸ’»', isNew: true },
+  { type: 'kafka',        label: 'Kafka / Kinesis',   category: 'custom',   authMethod: 'basic',         icon: 'âš¡' },
 ]
 
 const CATEGORIES: Array<{ id: ConnectorCategory | 'all'; label: string }> = [
@@ -70,13 +70,13 @@ const CATEGORY_LABELS: Record<ConnectorCategory, string> = {
   custom:   'Custom & developer',
 }
 
-// ─── Props ──────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Props â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface SourcePickerProps {
   onSelect: (connector: ConnectorDefinition) => void
 }
 
-// ─── Component ──────────────────────────────────────────────────────────────
+// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function SourcePicker({ onSelect }: SourcePickerProps) {
   const [search, setSearch]           = useState('')
@@ -133,7 +133,7 @@ export function SourcePicker({ onSelect }: SourcePickerProps) {
           <Search size={14} className="text-muted-foreground shrink-0" />
           <input
             type="text"
-            placeholder="Search — Shopify, Tally, Gmail, Postgres…"
+            placeholder="Search â€” Shopify, Tally, Gmail, Postgresâ€¦"
             className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             value={search}
             onChange={e => setSearch(e.target.value)}
@@ -229,10 +229,13 @@ export function SourcePicker({ onSelect }: SourcePickerProps) {
               : 'bg-muted text-muted-foreground cursor-not-allowed'
           )}
         >
-          Continue →
+          Continue â†’
         </button>
       </div>
 
     </div>
   )
 }
+
+
+

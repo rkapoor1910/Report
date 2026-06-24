@@ -1,4 +1,4 @@
-// ─── Connector types ────────────────────────────────────────────────────────
+﻿// â”€â”€â”€ Connector types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export type ConnectorCategory = 'files' | 'cloud' | 'database' | 'erp' | 'custom'
 
 export type ConnectorType =
@@ -28,7 +28,7 @@ export interface Connector {
   updatedAt: Date
 }
 
-// ─── Report types ───────────────────────────────────────────────────────────
+// â”€â”€â”€ Report types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export type ReportType =
   | 'sell_out' | 'stock_inventory' | 'demand_forecast' | 'daily_sales'
   | 'dispatch_logistics' | 'purchase_order' | 'franchise' | 'target_actual'
@@ -58,7 +58,7 @@ export interface ColumnMapping {
   role: 'metric' | 'dimension' | 'date' | 'id' | 'ignore'
 }
 
-// ─── Alert types ────────────────────────────────────────────────────────────
+// â”€â”€â”€ Alert types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export type AlertSeverity = 'info' | 'warning' | 'critical'
 export type DeliveryChannel = 'whatsapp' | 'sms' | 'email' | 'slack'
 export type SyncFrequency = 'realtime' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'manual'
@@ -93,7 +93,7 @@ export interface AlertStat {
   changePercent: number | null
 }
 
-// ─── User & org types ───────────────────────────────────────────────────────
+// â”€â”€â”€ User & org types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 export type UserRole = 'owner' | 'admin' | 'analyst' | 'viewer'
 
 export interface OrgMember {
@@ -114,3 +114,4 @@ export interface AlertSubscription {
   scheduleTime: string   // e.g. "08:00"
   scheduleDays: string[] // e.g. ["monday"] for weekly
 }
+

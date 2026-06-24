@@ -1,0 +1,419 @@
+﻿'use client'
+
+import { useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { Check, Zap, ArrowRight, Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+// ΓöÇΓöÇΓöÇ Step definitions ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+type OnboardingStep = 'welcome' | 'org' | 'connector' | 'report' | 'alert' | 'done'
+
+const STEPS: Array<{ id: OnboardingStep; label: string }> = [
+  { id: 'welcome',   label: 'Welcome' },
+  { id: 'org',       label: 'Your org' },
+  { id: 'connector', label: 'Connect data' },
+  { id: 'report',    label: 'Pick report' },
+  { id: 'alert',     label: 'First alert' },
+]
+
+// ΓöÇΓöÇΓöÇ Quick-start templates (Ess Gee style use cases) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+const TEMPLATES = [
+  {
+    id:    'retail_distributor',
+    emoji: '≡ƒÅ¬',
+    title: 'Retail & distribution',
+    desc:  'Monitor sell-out, stock levels, and franchise performance across brands',
+    connectors: ['gmail', 'google_sheets', 'tally'],
+    reports:    ['Retailer sell-out', 'Stock inventory', 'Target vs actual'],
+  },
+  {
+    id:    'ecommerce',
+    emoji: '≡ƒ¢ì∩╕Å',
+    title: 'E-commerce',
+    desc:  'Track Shopify sales, inventory, returns, and fulfilment daily',
+    connectors: ['shopify', 'stripe', 'gmail'],
+    reports:    ['Daily orders', 'Revenue', 'Returns'],
+  },
+  {
+    id:    'saas',
+    emoji: '≡ƒÆ╗',
+    title: 'SaaS business',
+    desc:  'Monitor MRR, churn signals, support volume, and feature usage',
+    connectors: ['stripe', 'hubspot', 'ga4'],
+    reports:    ['Revenue', 'Churn signals', 'Support tickets'],
+  },
+  {
+    id:    'custom',
+    emoji: 'ΓÜÖ∩╕Å',
+    title: 'Set up manually',
+    desc:  'Connect any data source and configure reports from scratch',
+    connectors: [],
+    reports:    [],
+  },
+]
+
+const ALERT_CHANNELS = [
+  { value: 'whatsapp', label: '≡ƒÆ¼ WhatsApp', desc: 'Best for instant alerts' },
+  { value: 'email',    label: '≡ƒôº Email',    desc: 'Good for digests' },
+  { value: 'slack',    label: '≡ƒö╖ Slack',    desc: 'Good for teams' },
+  { value: 'sms',      label: '≡ƒô▒ SMS',      desc: 'Most reliable' },
+]
+
+// ΓöÇΓöÇΓöÇ Component ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+export default function OnboardingPage() {
+  const searchParams      = useSearchParams()
+  const router            = useRouter()
+  const plan              = searchParams.get('plan') ?? 'growth'
+
+  const [step, setStep]           = useState<OnboardingStep>('welcome')
+  const [orgName, setOrgName]     = useState('')
+  const [industry, setIndustry]   = useState('retail')
+  const [template, setTemplate]   = useState<string | null>(null)
+  const [phone, setPhone]         = useState('')
+  const [channel, setChannel]     = useState('whatsapp')
+  const [alertTime, setAlertTime] = useState('08:00')
+  const [saving, setSaving]       = useState(false)
+
+  const stepIndex = STEPS.findIndex(s => s.id === step)
+
+  const handleFinish = async () => {
+    setSaving(true)
+    // TODO: POST /api/v1/orgs/onboard with all collected data
+    await new Promise(r => setTimeout(r, 1200))
+    router.push('/dashboard')
+  }
+
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-border">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-foreground flex items-center justify-center">
+            <Zap size={14} className="text-background" />
+          </div>
+          <span className="text-sm font-semibold text-foreground">ReportIQ</span>
+        </div>
+        {step !== 'done' && (
+          <div className="text-xs text-muted-foreground">
+            Step {Math.max(stepIndex, 0) + 1} of {STEPS.length}
+          </div>
+        )}
+      </div>
+
+      {/* Progress bar */}
+      {step !== 'done' && (
+        <div className="h-0.5 bg-border">
+          <div
+            className="h-full bg-foreground transition-all duration-300"
+            style={{ width: `${((stepIndex + 1) / STEPS.length) * 100}%` }}
+          />
+        </div>
+      )}
+
+      {/* Step content */}
+      <div className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-xl">
+
+          {/* ΓöÇΓöÇ Welcome ΓöÇΓöÇ */}
+          {step === 'welcome' && (
+            <div className="text-center space-y-6">
+              <div className="w-16 h-16 rounded-2xl bg-foreground flex items-center justify-center mx-auto">
+                <Zap size={28} className="text-background" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">Welcome to ReportIQ</h1>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  You're 10 minutes away from receiving your first plain-English business alert on WhatsApp.
+                  Let's get you set up.
+                </p>
+              </div>
+              <div className="bg-muted/30 border border-border rounded-xl p-5 text-left space-y-3">
+                {[
+                  { emoji: '≡ƒöî', text: 'Connect a data source ΓÇö email, spreadsheet, database, or app' },
+                  { emoji: '≡ƒôè', text: 'Choose which reports to monitor and map your columns' },
+                  { emoji: '≡ƒô▓', text: 'Get plain-English alerts with stats, red flags, and actions' },
+                ].map(item => (
+                  <div key={item.text} className="flex items-start gap-3">
+                    <span className="text-lg">{item.emoji}</span>
+                    <p className="text-sm text-foreground leading-relaxed">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={() => setStep('org')}
+                className="w-full py-3 bg-foreground text-background rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90"
+              >
+                Get started <ArrowRight size={14} />
+              </button>
+              <p className="text-xs text-muted-foreground">
+                You're on the <span className="font-medium capitalize">{plan}</span> plan ΓÇö 14-day free trial, no credit card needed
+              </p>
+            </div>
+          )}
+
+          {/* ΓöÇΓöÇ Organisation ΓöÇΓöÇ */}
+          {step === 'org' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Tell us about your business</h2>
+                <p className="text-sm text-muted-foreground mt-1">This helps ReportIQ personalise your alerts</p>
+              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-medium text-foreground mb-1.5">Business name</label>
+                  <input
+                    type="text"
+                    value={orgName}
+                    onChange={e => setOrgName(e.target.value)}
+                    placeholder="e.g. Ess Gee Group"
+                    className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none focus:ring-1 focus:ring-foreground/30"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-foreground mb-1.5">Industry</label>
+                  <select
+                    value={industry}
+                    onChange={e => setIndustry(e.target.value)}
+                    className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none"
+                  >
+                    <option value="retail">Retail & distribution</option>
+                    <option value="ecommerce">E-commerce</option>
+                    <option value="manufacturing">Manufacturing</option>
+                    <option value="saas">SaaS / software</option>
+                    <option value="finance">Finance</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                {/* Quick-start templates */}
+                <div>
+                  <label className="block text-xs font-medium text-foreground mb-2.5">
+                    What best describes what you want to monitor?
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {TEMPLATES.map(t => (
+                      <button
+                        key={t.id}
+                        onClick={() => setTemplate(t.id)}
+                        className={cn(
+                          'p-3 rounded-xl border text-left transition-all',
+                          template === t.id
+                            ? 'border-foreground ring-1 ring-foreground'
+                            : 'border-border hover:border-foreground/40'
+                        )}
+                      >
+                        <span className="text-xl">{t.emoji}</span>
+                        <p className="text-xs font-medium text-foreground mt-1.5">{t.title}</p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{t.desc}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <button
+                disabled={!orgName || !template}
+                onClick={() => setStep('connector')}
+                className="w-full py-2.5 bg-foreground text-background rounded-xl text-sm font-medium disabled:opacity-40 hover:opacity-90 flex items-center justify-center gap-2"
+              >
+                Continue <ArrowRight size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* ΓöÇΓöÇ Connector ΓöÇΓöÇ */}
+          {step === 'connector' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Connect your first data source</h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Start with the source that has the most important reports for your business
+                </p>
+              </div>
+              {template && (() => {
+                const tmpl = TEMPLATES.find(t => t.id === template)
+                return tmpl && tmpl.connectors.length > 0 ? (
+                  <div className="rounded-xl border border-border bg-muted/20 p-4">
+                    <p className="text-xs font-medium text-foreground mb-2">Recommended for {tmpl.title}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {tmpl.connectors.map(c => (
+                        <span key={c} className="text-xs px-2.5 py-1 rounded-full border border-border bg-background text-foreground capitalize">
+                          {c.replace('_', ' ')}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ) : null
+              })()}
+              <div className="space-y-2">
+                {[
+                  { icon: '≡ƒôº', label: 'Gmail / Outlook',    desc: 'Pick up Excel/CSV reports from email attachments', href: '/dashboard/connectors/new?type=gmail' },
+                  { icon: '≡ƒùé∩╕Å', label: 'Google Sheets',      desc: 'Sync live from a shared spreadsheet',              href: '/dashboard/connectors/new?type=google_sheets' },
+                  { icon: '≡ƒº╛', label: 'Tally',              desc: 'Connect directly to your Tally installation',      href: '/dashboard/connectors/new?type=tally' },
+                  { icon: '≡ƒôè', label: 'Upload Excel / CSV', desc: 'Manually upload a report file to start',           href: '/dashboard/connectors/new?type=excel_upload' },
+                ].map(option => (
+                  <a
+                    key={option.label}
+                    href={option.href}
+                    className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-foreground/40 bg-background transition-colors"
+                  >
+                    <span className="text-xl">{option.icon}</span>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground">{option.label}</p>
+                      <p className="text-xs text-muted-foreground">{option.desc}</p>
+                    </div>
+                    <ArrowRight size={13} className="text-muted-foreground" />
+                  </a>
+                ))}
+              </div>
+              <button
+                onClick={() => setStep('report')}
+                className="w-full text-xs text-muted-foreground hover:text-foreground py-2"
+              >
+                Skip for now ΓÇö I'll connect later ΓåÆ
+              </button>
+            </div>
+          )}
+
+          {/* ΓöÇΓöÇ Report ΓöÇΓöÇ */}
+          {step === 'report' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Which report do you want to monitor first?</h2>
+                <p className="text-sm text-muted-foreground mt-1">Pick the one that's most important to your business today</p>
+              </div>
+              <div className="space-y-2">
+                {[
+                  { emoji: '≡ƒôª', label: 'Stock / inventory',     desc: 'Know when stock is low or sitting idle' },
+                  { emoji: '≡ƒ¢ì∩╕Å', label: 'Retailer sell-out',    desc: 'Track daily sales by store, brand, SKU' },
+                  { emoji: '≡ƒÄ»', label: 'Target vs actual',      desc: 'Get alerted when the team misses target' },
+                  { emoji: '≡ƒÜÜ', label: 'Dispatch & logistics',  desc: 'Monitor orders shipped, pending, returned' },
+                  { emoji: 'Γå⌐∩╕Å', label: 'Returns & defects',    desc: 'Spot return rate spikes before they escalate' },
+                ].map(option => (
+                  <a
+                    key={option.label}
+                    href={`/dashboard/reports/new`}
+                    className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-foreground/40 bg-background transition-colors"
+                  >
+                    <span className="text-xl">{option.emoji}</span>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground">{option.label}</p>
+                      <p className="text-xs text-muted-foreground">{option.desc}</p>
+                    </div>
+                    <ArrowRight size={13} className="text-muted-foreground" />
+                  </a>
+                ))}
+              </div>
+              <button
+                onClick={() => setStep('alert')}
+                className="w-full text-xs text-muted-foreground hover:text-foreground py-2"
+              >
+                Skip ΓÇö set up reports later ΓåÆ
+              </button>
+            </div>
+          )}
+
+          {/* ΓöÇΓöÇ Alert setup ΓöÇΓöÇ */}
+          {step === 'alert' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-foreground">Where should we send your alerts?</h2>
+                <p className="text-sm text-muted-foreground mt-1">You can change this anytime ΓÇö start with the channel you check most</p>
+              </div>
+              <div className="space-y-2">
+                {ALERT_CHANNELS.map(ch => (
+                  <button
+                    key={ch.value}
+                    onClick={() => setChannel(ch.value)}
+                    className={cn(
+                      'w-full flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all',
+                      channel === ch.value
+                        ? 'border-foreground ring-1 ring-foreground'
+                        : 'border-border hover:border-foreground/40'
+                    )}
+                  >
+                    <span className="text-lg">{ch.label.split(' ')[0]}</span>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-foreground">{ch.label.split(' ').slice(1).join(' ')}</p>
+                      <p className="text-xs text-muted-foreground">{ch.desc}</p>
+                    </div>
+                    <div className={cn(
+                      'w-4 h-4 rounded-full border-2 transition-colors shrink-0',
+                      channel === ch.value ? 'border-foreground bg-foreground' : 'border-border'
+                    )} />
+                  </button>
+                ))}
+              </div>
+
+              {/* Phone number for WhatsApp/SMS */}
+              {(channel === 'whatsapp' || channel === 'sms') && (
+                <div>
+                  <label className="block text-xs font-medium text-foreground mb-1.5">
+                    Your {channel === 'whatsapp' ? 'WhatsApp' : 'mobile'} number
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder="+91 98765 43210"
+                    className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none focus:ring-1 focus:ring-foreground/30"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-xs font-medium text-foreground mb-1.5">Send daily summary at</label>
+                <select
+                  value={alertTime}
+                  onChange={e => setAlertTime(e.target.value)}
+                  className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none"
+                >
+                  {['06:00','07:00','08:00','09:00','10:00','18:00','19:00','20:00'].map(t => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                onClick={handleFinish}
+                disabled={saving || ((channel === 'whatsapp' || channel === 'sms') && !phone)}
+                className="w-full py-3 bg-foreground text-background rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-40"
+              >
+                {saving
+                  ? <><Loader2 size={14} className="animate-spin" /> Setting up your accountΓÇª</>
+                  : <>Finish setup <ArrowRight size={14} /></>
+                }
+              </button>
+            </div>
+          )}
+
+          {/* ΓöÇΓöÇ Done ΓöÇΓöÇ */}
+          {step === 'done' && (
+            <div className="text-center space-y-6">
+              <div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 flex items-center justify-center mx-auto">
+                <Check size={28} className="text-green-600" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-foreground">You're all set</h2>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  ReportIQ will send your first alert at {alertTime} once your data source syncs.<br />
+                  Head to your dashboard to manage connectors and reports.
+                </p>
+              </div>
+              <a
+                href="/dashboard"
+                className="w-full py-3 bg-foreground text-background rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90"
+              >
+                Go to dashboard <ArrowRight size={14} />
+              </a>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  )
+}

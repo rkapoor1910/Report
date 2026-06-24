@@ -1,4 +1,4 @@
-'use client'
+﻿﻿'use client'
 
 import { useState } from 'react'
 import { CheckCircle2, XCircle, AlertTriangle, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react'
@@ -103,7 +103,7 @@ export function ConnectorTestResult({ connector, result, onDone }: ConnectorTest
                       <tr key={i} className="border-b border-border last:border-0 hover:bg-muted/20">
                         {(testResult.columns ?? Object.keys(row)).map(col => (
                           <td key={col} className="px-3 py-2 text-foreground whitespace-nowrap max-w-[180px] truncate">
-                            {String(row[col] ?? '—')}
+                            {String(row[col] ?? 'â€”')}
                           </td>
                         ))}
                       </tr>
@@ -113,7 +113,7 @@ export function ConnectorTestResult({ connector, result, onDone }: ConnectorTest
               </div>
             </div>
             <p className="text-[11px] text-muted-foreground mt-1.5">
-              Showing first {Math.min(5, testResult.preview.length)} rows · Full data syncs on schedule
+              Showing first {Math.min(5, testResult.preview.length)} rows Â· Full data syncs on schedule
             </p>
           </div>
         )}
@@ -164,7 +164,7 @@ export function ConnectorTestResult({ connector, result, onDone }: ConnectorTest
               className="flex-1 h-10 rounded-lg border border-border text-sm font-medium flex items-center justify-center gap-2 hover:bg-muted transition-colors disabled:opacity-50"
             >
               <RefreshCw size={14} className={retrying ? 'animate-spin' : ''} />
-              {retrying ? 'Retrying…' : 'Retry connection'}
+              {retrying ? 'Retryingâ€¦' : 'Retry connection'}
             </button>
           )}
           {!success && (
@@ -180,7 +180,7 @@ export function ConnectorTestResult({ connector, result, onDone }: ConnectorTest
               onClick={onDone}
               className="flex-1 h-10 bg-foreground text-background rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
             >
-              Continue to reports →
+              Continue to reports â†’
             </button>
           )}
         </div>
@@ -198,3 +198,5 @@ export function ConnectorTestResult({ connector, result, onDone }: ConnectorTest
     </div>
   )
 }
+
+

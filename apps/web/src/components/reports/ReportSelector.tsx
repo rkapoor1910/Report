@@ -1,4 +1,4 @@
-'use client'
+﻿﻿'use client'
 
 import { useState, useEffect } from 'react'
 import { Loader2, RefreshCw, Table2, FileSpreadsheet, Mail, Database, Globe } from 'lucide-react'
@@ -31,16 +31,16 @@ const TYPE_ICON: Record<string, React.ReactNode> = {
 
 // Report types to help users label what they're setting up
 const REPORT_TYPES = [
-  { value: 'sell_out',          label: 'Retailer sell-out',     emoji: '🛍️' },
-  { value: 'stock_inventory',   label: 'Stock / inventory',     emoji: '📦' },
-  { value: 'demand_forecast',   label: 'Demand / forecast',     emoji: '📈' },
-  { value: 'daily_sales',       label: 'Daily POS sales',       emoji: '🧾' },
-  { value: 'dispatch_logistics',label: 'Dispatch / logistics',  emoji: '🚚' },
-  { value: 'purchase_order',    label: 'Purchase orders',       emoji: '📋' },
-  { value: 'franchise',         label: 'Franchise partner',     emoji: '🏪' },
-  { value: 'target_actual',     label: 'Target vs actual',      emoji: '🎯' },
-  { value: 'returns_defects',   label: 'Returns & defects',     emoji: '↩️' },
-  { value: 'custom',            label: 'Custom report',         emoji: '⚙️' },
+  { value: 'sell_out',          label: 'Retailer sell-out',     emoji: 'ðŸ›ï¸' },
+  { value: 'stock_inventory',   label: 'Stock / inventory',     emoji: 'ðŸ“¦' },
+  { value: 'demand_forecast',   label: 'Demand / forecast',     emoji: 'ðŸ“ˆ' },
+  { value: 'daily_sales',       label: 'Daily POS sales',       emoji: 'ðŸ§¾' },
+  { value: 'dispatch_logistics',label: 'Dispatch / logistics',  emoji: 'ðŸšš' },
+  { value: 'purchase_order',    label: 'Purchase orders',       emoji: 'ðŸ“‹' },
+  { value: 'franchise',         label: 'Franchise partner',     emoji: 'ðŸª' },
+  { value: 'target_actual',     label: 'Target vs actual',      emoji: 'ðŸŽ¯' },
+  { value: 'returns_defects',   label: 'Returns & defects',     emoji: 'â†©ï¸' },
+  { value: 'custom',            label: 'Custom report',         emoji: 'âš™ï¸' },
 ]
 
 export function ReportSelector({ connectorId, connectorType, connectorName, onSelect, onBack }: ReportSelectorProps) {
@@ -72,7 +72,7 @@ export function ReportSelector({ connectorId, connectorType, connectorName, onSe
   useEffect(() => {
     if (selected && reportType) {
       const typeMeta = REPORT_TYPES.find(t => t.value === reportType)
-      setReportName(typeMeta ? `${typeMeta.emoji} ${connectorName} — ${typeMeta.label}` : selected.label)
+      setReportName(typeMeta ? `${typeMeta.emoji} ${connectorName} â€” ${typeMeta.label}` : selected.label)
     }
   }, [selected, reportType, connectorName])
 
@@ -182,7 +182,7 @@ export function ReportSelector({ connectorId, connectorType, connectorName, onSe
             type="text"
             value={reportName}
             onChange={e => setReportName(e.target.value)}
-            placeholder="e.g. 📦 Adidas stock report — Delhi warehouse"
+            placeholder="e.g. ðŸ“¦ Adidas stock report â€” Delhi warehouse"
             className="w-full h-9 px-3 rounded-lg border border-border bg-background text-sm outline-none focus:ring-1 focus:ring-foreground/30"
           />
         </div>
@@ -192,7 +192,7 @@ export function ReportSelector({ connectorId, connectorType, connectorName, onSe
       {/* Footer */}
       <div className="px-5 py-4 border-t border-border flex items-center justify-between bg-muted/20">
         <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-          ← Back
+          â† Back
         </button>
         <button
           disabled={!canContinue}
@@ -204,10 +204,12 @@ export function ReportSelector({ connectorId, connectorType, connectorName, onSe
               : 'bg-muted text-muted-foreground cursor-not-allowed'
           )}
         >
-          Map columns →
+          Map columns â†’
         </button>
       </div>
 
     </div>
   )
 }
+
+

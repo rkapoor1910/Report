@@ -1,4 +1,4 @@
-'use client'
+﻿﻿'use client'
 
 import { useState } from 'react'
 import { TrendingDown, TrendingUp, Clock, Package, CheckCircle2 } from 'lucide-react'
@@ -22,17 +22,17 @@ interface ThresholdConfigProps {
 const PRESETS: Array<{ label: string; description: string; values: Thresholds }> = [
   {
     label: 'Sensitive',
-    description: 'Alert on small changes — good for critical metrics',
+    description: 'Alert on small changes â€” good for critical metrics',
     values: { dropAlertPct: 10, spikeAlertPct: 20, missingDataHrs: 12 },
   },
   {
     label: 'Balanced',
-    description: 'Default — catches meaningful changes without noise',
+    description: 'Default â€” catches meaningful changes without noise',
     values: { dropAlertPct: 15, spikeAlertPct: 30, missingDataHrs: 24 },
   },
   {
     label: 'Relaxed',
-    description: 'Only flag large deviations — for noisy data sources',
+    description: 'Only flag large deviations â€” for noisy data sources',
     values: { dropAlertPct: 25, spikeAlertPct: 50, missingDataHrs: 48 },
   },
 ]
@@ -40,7 +40,7 @@ const PRESETS: Array<{ label: string; description: string; values: Thresholds }>
 const FREQUENCIES = [
   { value: 'realtime', label: 'Real-time',    description: 'As soon as data arrives' },
   { value: 'hourly',   label: 'Hourly',       description: 'Every hour' },
-  { value: 'daily',    label: 'Daily',        description: 'Once a day — recommended' },
+  { value: 'daily',    label: 'Daily',        description: 'Once a day â€” recommended' },
   { value: 'weekly',   label: 'Weekly',       description: 'Once a week' },
   { value: 'manual',   label: 'Manual only',  description: 'Only when you trigger it' },
 ]
@@ -76,7 +76,7 @@ export function ThresholdConfig({ reportType, reportName, primaryMetric, onBack,
       <div className="flex flex-col items-center justify-center h-80 gap-3">
         <CheckCircle2 size={32} className="text-green-600" />
         <p className="text-sm font-medium text-foreground">Report saved</p>
-        <p className="text-xs text-muted-foreground">Setting up your alert subscriptions…</p>
+        <p className="text-xs text-muted-foreground">Setting up your alert subscriptionsâ€¦</p>
       </div>
     )
   }
@@ -154,7 +154,7 @@ export function ThresholdConfig({ reportType, reportName, primaryMetric, onBack,
               className="w-full accent-foreground"
             />
             <p className="text-[11px] text-muted-foreground mt-2">
-              Alert on unexpected spikes — could indicate data errors or a breakout moment
+              Alert on unexpected spikes â€” could indicate data errors or a breakout moment
             </p>
           </div>
 
@@ -174,11 +174,11 @@ export function ThresholdConfig({ reportType, reportName, primaryMetric, onBack,
               className="w-full accent-foreground"
             />
             <p className="text-[11px] text-muted-foreground mt-2">
-              Alert if no data arrives for <strong>{thresholds.missingDataHrs} hours</strong> — catches silent failures
+              Alert if no data arrives for <strong>{thresholds.missingDataHrs} hours</strong> â€” catches silent failures
             </p>
           </div>
 
-          {/* Dead stock — only for inventory reports */}
+          {/* Dead stock â€” only for inventory reports */}
           {isStock && (
             <div className="rounded-lg border border-border p-4">
               <div className="flex items-center justify-between mb-3">
@@ -233,16 +233,18 @@ export function ThresholdConfig({ reportType, reportName, primaryMetric, onBack,
 
       {/* Footer */}
       <div className="px-5 py-4 border-t border-border flex items-center justify-between bg-muted/20">
-        <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">← Back</button>
+        <button onClick={onBack} className="text-sm text-muted-foreground hover:text-foreground">â† Back</button>
         <button
           onClick={handleSave}
           disabled={saving}
           className="px-5 py-2 bg-foreground text-background rounded-lg text-sm font-medium hover:opacity-90 disabled:opacity-50 flex items-center gap-2"
         >
-          {saving ? 'Saving…' : 'Save report →'}
+          {saving ? 'Savingâ€¦' : 'Save report â†’'}
         </button>
       </div>
 
     </div>
   )
 }
+
+

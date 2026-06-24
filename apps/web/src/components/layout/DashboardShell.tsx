@@ -1,4 +1,4 @@
-'use client'
+﻿﻿'use client'
 
 import { useState } from 'react'
 import Link from 'next/link'
@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// ─── Nav items ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Nav items â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const NAV = [
   {
@@ -35,7 +35,7 @@ const NAV = [
     label: 'Alerts',
     href:  '/dashboard/alerts',
     icon:  Bell,
-    badge: '3',   // unread count — fetched in real impl
+    badge: '3',   // unread count â€” fetched in real impl
   },
   {
     label: 'Team',
@@ -51,7 +51,7 @@ const NAV = [
   },
 ]
 
-// ─── Component ───────────────────────────────────────────────────────────────
+// â”€â”€â”€ Component â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const pathname      = usePathname()
@@ -63,7 +63,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen bg-background overflow-hidden">
 
-      {/* ── Mobile overlay ── */}
+      {/* â”€â”€ Mobile overlay â”€â”€ */}
       {open && (
         <div
           className="fixed inset-0 z-40 bg-black/40 lg:hidden"
@@ -71,7 +71,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      {/* ── Sidebar ── */}
+      {/* â”€â”€ Sidebar â”€â”€ */}
       <aside className={cn(
         'fixed inset-y-0 left-0 z-50 w-56 flex flex-col bg-background border-r border-border transition-transform duration-200',
         'lg:relative lg:translate-x-0',
@@ -139,7 +139,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
       </aside>
 
-      {/* ── Main area ── */}
+      {/* â”€â”€ Main area â”€â”€ */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
 
         {/* Top bar */}
@@ -192,3 +192,5 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
     </div>
   )
 }
+
+

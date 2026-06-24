@@ -1,14 +1,14 @@
-import Link from 'next/link'
+﻿﻿import Link from 'next/link'
 import { Check, Zap, ArrowRight } from 'lucide-react'
 
-// ─── Pricing config ──────────────────────────────────────────────────────────
+// â”€â”€â”€ Pricing config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const PLANS = [
   {
     id:          'starter',
     name:        'Starter',
     price:       29,
-    currency:    '₹',
+    currency:    'â‚¹',
     period:      'mo',
     description: 'Perfect for a single store or brand manager getting started',
     highlight:   false,
@@ -33,7 +33,7 @@ const PLANS = [
     id:          'growth',
     name:        'Growth',
     price:       99,
-    currency:    '₹',
+    currency:    'â‚¹',
     period:      'mo',
     description: 'For distribution businesses with multiple brands and locations',
     highlight:   true,
@@ -60,7 +60,7 @@ const PLANS = [
     id:          'enterprise',
     name:        'Enterprise',
     price:       null,
-    currency:    '₹',
+    currency:    'â‚¹',
     period:      'mo',
     description: 'For large distributors and multi-brand groups with custom needs',
     highlight:   false,
@@ -89,7 +89,7 @@ const PLANS = [
 const FAQS = [
   {
     q: 'Do you offer a free trial?',
-    a: 'Yes — all plans include a 14-day free trial with no credit card required. You get full access to all features on your chosen plan.',
+    a: 'Yes â€” all plans include a 14-day free trial with no credit card required. You get full access to all features on your chosen plan.',
   },
   {
     q: 'Can I connect Tally, SAP, or a custom ERP?',
@@ -97,7 +97,7 @@ const FAQS = [
   },
   {
     q: 'How does WhatsApp delivery work?',
-    a: 'We use the WhatsApp Business API via Twilio. You receive alerts on your personal WhatsApp number — no separate app needed. Each alert is a readable, formatted message in plain English.',
+    a: 'We use the WhatsApp Business API via Twilio. You receive alerts on your personal WhatsApp number â€” no separate app needed. Each alert is a readable, formatted message in plain English.',
   },
   {
     q: 'What happens if a data source goes offline?',
@@ -109,11 +109,11 @@ const FAQS = [
   },
   {
     q: 'Is my data secure?',
-    a: 'All credentials are encrypted with AES-256-GCM. Data is processed in your region. We never store raw report data beyond the current analysis window — only summaries and alert records.',
+    a: 'All credentials are encrypted with AES-256-GCM. Data is processed in your region. We never store raw report data beyond the current analysis window â€” only summaries and alert records.',
   },
 ]
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function PricingPage() {
   return (
@@ -188,7 +188,7 @@ export default function PricingPage() {
                   </div>
                 )}
                 <p className={`text-[11px] mt-1 ${plan.highlight ? 'text-background/60' : 'text-muted-foreground'}`}>
-                  14-day free trial · No credit card required
+                  14-day free trial Â· No credit card required
                 </p>
               </div>
 
@@ -236,3 +236,4 @@ export default function PricingPage() {
     </div>
   )
 }
+
