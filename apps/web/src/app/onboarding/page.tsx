@@ -1,2 +1,273 @@
-﻿'use client'
-export const dynamic = 'force-dynamic'  import { useState } from 'react' import { useSearchParams, useRouter } from 'next/navigation' import { Check, Zap, ArrowRight, Loader2 } from 'lucide-react' import { cn } from '@/lib/utils'  // ΓöÇΓöÇΓöÇ Step definitions ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  type OnboardingStep = 'welcome' | 'org' | 'connector' | 'report' | 'alert' | 'done'  const STEPS: Array<{ id: OnboardingStep; label: string }> = [   { id: 'welcome',   label: 'Welcome' },   { id: 'org',       label: 'Your org' },   { id: 'connector', label: 'Connect data' },   { id: 'report',    label: 'Pick report' },   { id: 'alert',     label: 'First alert' }, ]  // ΓöÇΓöÇΓöÇ Quick-start templates (Ess Gee style use cases) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  const TEMPLATES = [   {     id:    'retail_distributor',     emoji: '≡ƒÅ¬',     title: 'Retail & distribution',     desc:  'Monitor sell-out, stock levels, and franchise performance across brands',     connectors: ['gmail', 'google_sheets', 'tally'],     reports:    ['Retailer sell-out', 'Stock inventory', 'Target vs actual'],   },   {     id:    'ecommerce',     emoji: '≡ƒ¢ì∩╕Å',     title: 'E-commerce',     desc:  'Track Shopify sales, inventory, returns, and fulfilment daily',     connectors: ['shopify', 'stripe', 'gmail'],     reports:    ['Daily orders', 'Revenue', 'Returns'],   },   {     id:    'saas',     emoji: '≡ƒÆ╗',     title: 'SaaS business',     desc:  'Monitor MRR, churn signals, support volume, and feature usage',     connectors: ['stripe', 'hubspot', 'ga4'],     reports:    ['Revenue', 'Churn signals', 'Support tickets'],   },   {     id:    'custom',     emoji: 'ΓÜÖ∩╕Å',     title: 'Set up manually',     desc:  'Connect any data source and configure reports from scratch',     connectors: [],     reports:    [],   }, ]  const ALERT_CHANNELS = [   { value: 'whatsapp', label: '≡ƒÆ¼ WhatsApp', desc: 'Best for instant alerts' },   { value: 'email',    label: '≡ƒôº Email',    desc: 'Good for digests' },   { value: 'slack',    label: '≡ƒö╖ Slack',    desc: 'Good for teams' },   { value: 'sms',      label: '≡ƒô▒ SMS',      desc: 'Most reliable' }, ]  // ΓöÇΓöÇΓöÇ Component ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ  export default function OnboardingPage() {   const searchParams      = useSearchParams()   const router            = useRouter()   const plan              = searchParams.get('plan') ?? 'growth'    const [step, setStep]           = useState<OnboardingStep>('welcome')   const [orgName, setOrgName]     = useState('')   const [industry, setIndustry]   = useState('retail')   const [template, setTemplate]   = useState<string | null>(null)   const [phone, setPhone]         = useState('')   const [channel, setChannel]     = useState('whatsapp')   const [alertTime, setAlertTime] = useState('08:00')   const [saving, setSaving]       = useState(false)    const stepIndex = STEPS.findIndex(s => s.id === step)    const handleFinish = async () => {     setSaving(true)     // TODO: POST /api/v1/orgs/onboard with all collected data     await new Promise(r => setTimeout(r, 1200))     router.push('/dashboard')   }    return (     <div className="min-h-screen bg-background flex flex-col">        {/* Top bar */}       <div className="flex items-center justify-between px-6 py-4 border-b border-border">         <div className="flex items-center gap-2">           <div className="w-7 h-7 rounded-lg bg-foreground flex items-center justify-center">             <Zap size={14} className="text-background" />           </div>           <span className="text-sm font-semibold text-foreground">ReportIQ</span>         </div>         {step !== 'done' && (           <div className="text-xs text-muted-foreground">             Step {Math.max(stepIndex, 0) + 1} of {STEPS.length}           </div>         )}       </div>        {/* Progress bar */}       {step !== 'done' && (         <div className="h-0.5 bg-border">           <div             className="h-full bg-foreground transition-all duration-300"             style={{ width: `${((stepIndex + 1) / STEPS.length) * 100}%` }}           />         </div>       )}        {/* Step content */}       <div className="flex-1 flex items-center justify-center px-4 py-12">         <div className="w-full max-w-xl">            {/* ΓöÇΓöÇ Welcome ΓöÇΓöÇ */}           {step === 'welcome' && (             <div className="text-center space-y-6">               <div className="w-16 h-16 rounded-2xl bg-foreground flex items-center justify-center mx-auto">                 <Zap size={28} className="text-background" />               </div>               <div>                 <h1 className="text-2xl font-bold text-foreground">Welcome to ReportIQ</h1>                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">                   You're 10 minutes away from receiving your first plain-English business alert on WhatsApp.                   Let's get you set up.                 </p>               </div>               <div className="bg-muted/30 border border-border rounded-xl p-5 text-left space-y-3">                 {[                   { emoji: '≡ƒöî', text: 'Connect a data source ΓÇö email, spreadsheet, database, or app' },                   { emoji: '≡ƒôè', text: 'Choose which reports to monitor and map your columns' },                   { emoji: '≡ƒô▓', text: 'Get plain-English alerts with stats, red flags, and actions' },                 ].map(item => (                   <div key={item.text} className="flex items-start gap-3">                     <span className="text-lg">{item.emoji}</span>                     <p className="text-sm text-foreground leading-relaxed">{item.text}</p>                   </div>                 ))}               </div>               <button                 onClick={() => setStep('org')}                 className="w-full py-3 bg-foreground text-background rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90"               >                 Get started <ArrowRight size={14} />               </button>               <p className="text-xs text-muted-foreground">                 You're on the <span className="font-medium capitalize">{plan}</span> plan ΓÇö 14-day free trial, no credit card needed               </p>             </div>           )}            {/* ΓöÇΓöÇ Organisation ΓöÇΓöÇ */}           {step === 'org' && (             <div className="space-y-6">               <div>                 <h2 className="text-xl font-bold text-foreground">Tell us about your business</h2>                 <p className="text-sm text-muted-foreground mt-1">This helps ReportIQ personalise your alerts</p>               </div>               <div className="space-y-4">                 <div>                   <label className="block text-xs font-medium text-foreground mb-1.5">Business name</label>                   <input                     type="text"                     value={orgName}                     onChange={e => setOrgName(e.target.value)}                     placeholder="e.g. Ess Gee Group"                     className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none focus:ring-1 focus:ring-foreground/30"                   />                 </div>                 <div>                   <label className="block text-xs font-medium text-foreground mb-1.5">Industry</label>                   <select                     value={industry}                     onChange={e => setIndustry(e.target.value)}                     className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none"                   >                     <option value="retail">Retail & distribution</option>                     <option value="ecommerce">E-commerce</option>                     <option value="manufacturing">Manufacturing</option>                     <option value="saas">SaaS / software</option>                     <option value="finance">Finance</option>                     <option value="other">Other</option>                   </select>                 </div>                  {/* Quick-start templates */}                 <div>                   <label className="block text-xs font-medium text-foreground mb-2.5">                     What best describes what you want to monitor?                   </label>                   <div className="grid grid-cols-2 gap-2">                     {TEMPLATES.map(t => (                       <button                         key={t.id}                         onClick={() => setTemplate(t.id)}                         className={cn(                           'p-3 rounded-xl border text-left transition-all',                           template === t.id                             ? 'border-foreground ring-1 ring-foreground'                             : 'border-border hover:border-foreground/40'                         )}                       >                         <span className="text-xl">{t.emoji}</span>                         <p className="text-xs font-medium text-foreground mt-1.5">{t.title}</p>                         <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{t.desc}</p>                       </button>                     ))}                   </div>                 </div>               </div>               <button                 disabled={!orgName || !template}                 onClick={() => setStep('connector')}                 className="w-full py-2.5 bg-foreground text-background rounded-xl text-sm font-medium disabled:opacity-40 hover:opacity-90 flex items-center justify-center gap-2"               >                 Continue <ArrowRight size={14} />               </button>             </div>           )}            {/* ΓöÇΓöÇ Connector ΓöÇΓöÇ */}           {step === 'connector' && (             <div className="space-y-6">               <div>                 <h2 className="text-xl font-bold text-foreground">Connect your first data source</h2>                 <p className="text-sm text-muted-foreground mt-1">                   Start with the source that has the most important reports for your business                 </p>               </div>               {template && (() => {                 const tmpl = TEMPLATES.find(t => t.id === template)                 return tmpl && tmpl.connectors.length > 0 ? (                   <div className="rounded-xl border border-border bg-muted/20 p-4">                     <p className="text-xs font-medium text-foreground mb-2">Recommended for {tmpl.title}</p>                     <div className="flex flex-wrap gap-2">                       {tmpl.connectors.map(c => (                         <span key={c} className="text-xs px-2.5 py-1 rounded-full border border-border bg-background text-foreground capitalize">                           {c.replace('_', ' ')}                         </span>                       ))}                     </div>                   </div>                 ) : null               })()}               <div className="space-y-2">                 {[                   { icon: '≡ƒôº', label: 'Gmail / Outlook',    desc: 'Pick up Excel/CSV reports from email attachments', href: '/dashboard/connectors/new?type=gmail' },                   { icon: '≡ƒùé∩╕Å', label: 'Google Sheets',      desc: 'Sync live from a shared spreadsheet',              href: '/dashboard/connectors/new?type=google_sheets' },                   { icon: '≡ƒº╛', label: 'Tally',              desc: 'Connect directly to your Tally installation',      href: '/dashboard/connectors/new?type=tally' },                   { icon: '≡ƒôè', label: 'Upload Excel / CSV', desc: 'Manually upload a report file to start',           href: '/dashboard/connectors/new?type=excel_upload' },                 ].map(option => (                   <a                     key={option.label}                     href={option.href}                     className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-foreground/40 bg-background transition-colors"                   >                     <span className="text-xl">{option.icon}</span>                     <div className="flex-1">                       <p className="text-sm font-medium text-foreground">{option.label}</p>                       <p className="text-xs text-muted-foreground">{option.desc}</p>                     </div>                     <ArrowRight size={13} className="text-muted-foreground" />                   </a>                 ))}               </div>               <button                 onClick={() => setStep('report')}                 className="w-full text-xs text-muted-foreground hover:text-foreground py-2"               >                 Skip for now ΓÇö I'll connect later ΓåÆ               </button>             </div>           )}            {/* ΓöÇΓöÇ Report ΓöÇΓöÇ */}           {step === 'report' && (             <div className="space-y-6">               <div>                 <h2 className="text-xl font-bold text-foreground">Which report do you want to monitor first?</h2>                 <p className="text-sm text-muted-foreground mt-1">Pick the one that's most important to your business today</p>               </div>               <div className="space-y-2">                 {[                   { emoji: '≡ƒôª', label: 'Stock / inventory',     desc: 'Know when stock is low or sitting idle' },                   { emoji: '≡ƒ¢ì∩╕Å', label: 'Retailer sell-out',    desc: 'Track daily sales by store, brand, SKU' },                   { emoji: '≡ƒÄ»', label: 'Target vs actual',      desc: 'Get alerted when the team misses target' },                   { emoji: '≡ƒÜÜ', label: 'Dispatch & logistics',  desc: 'Monitor orders shipped, pending, returned' },                   { emoji: 'Γå⌐∩╕Å', label: 'Returns & defects',    desc: 'Spot return rate spikes before they escalate' },                 ].map(option => (                   <a                     key={option.label}                     href={`/dashboard/reports/new`}                     className="flex items-center gap-3 p-3.5 rounded-xl border border-border hover:border-foreground/40 bg-background transition-colors"                   >                     <span className="text-xl">{option.emoji}</span>                     <div className="flex-1">                       <p className="text-sm font-medium text-foreground">{option.label}</p>                       <p className="text-xs text-muted-foreground">{option.desc}</p>                     </div>                     <ArrowRight size={13} className="text-muted-foreground" />                   </a>                 ))}               </div>               <button                 onClick={() => setStep('alert')}                 className="w-full text-xs text-muted-foreground hover:text-foreground py-2"               >                 Skip ΓÇö set up reports later ΓåÆ               </button>             </div>           )}            {/* ΓöÇΓöÇ Alert setup ΓöÇΓöÇ */}           {step === 'alert' && (             <div className="space-y-6">               <div>                 <h2 className="text-xl font-bold text-foreground">Where should we send your alerts?</h2>                 <p className="text-sm text-muted-foreground mt-1">You can change this anytime ΓÇö start with the channel you check most</p>               </div>               <div className="space-y-2">                 {ALERT_CHANNELS.map(ch => (                   <button                     key={ch.value}                     onClick={() => setChannel(ch.value)}                     className={cn(                       'w-full flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all',                       channel === ch.value                         ? 'border-foreground ring-1 ring-foreground'                         : 'border-border hover:border-foreground/40'                     )}                   >                     <span className="text-lg">{ch.label.split(' ')[0]}</span>                     <div className="flex-1">                       <p className="text-sm font-medium text-foreground">{ch.label.split(' ').slice(1).join(' ')}</p>                       <p className="text-xs text-muted-foreground">{ch.desc}</p>                     </div>                     <div className={cn(                       'w-4 h-4 rounded-full border-2 transition-colors shrink-0',                       channel === ch.value ? 'border-foreground bg-foreground' : 'border-border'                     )} />                   </button>                 ))}               </div>                {/* Phone number for WhatsApp/SMS */}               {(channel === 'whatsapp' || channel === 'sms') && (                 <div>                   <label className="block text-xs font-medium text-foreground mb-1.5">                     Your {channel === 'whatsapp' ? 'WhatsApp' : 'mobile'} number                   </label>                   <input                     type="tel"                     value={phone}                     onChange={e => setPhone(e.target.value)}                     placeholder="+91 98765 43210"                     className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none focus:ring-1 focus:ring-foreground/30"                   />                 </div>               )}                <div>                 <label className="block text-xs font-medium text-foreground mb-1.5">Send daily summary at</label>                 <select                   value={alertTime}                   onChange={e => setAlertTime(e.target.value)}                   className="w-full h-10 px-3 rounded-lg border border-border bg-background text-sm outline-none"                 >                   {['06:00','07:00','08:00','09:00','10:00','18:00','19:00','20:00'].map(t => (                     <option key={t} value={t}>{t}</option>                   ))}                 </select>               </div>                <button                 onClick={handleFinish}                 disabled={saving || ((channel === 'whatsapp' || channel === 'sms') && !phone)}                 className="w-full py-3 bg-foreground text-background rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90 disabled:opacity-40"               >                 {saving                   ? <><Loader2 size={14} className="animate-spin" /> Setting up your accountΓÇª</>                   : <>Finish setup <ArrowRight size={14} /></>                 }               </button>             </div>           )}            {/* ΓöÇΓöÇ Done ΓöÇΓöÇ */}           {step === 'done' && (             <div className="text-center space-y-6">               <div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 flex items-center justify-center mx-auto">                 <Check size={28} className="text-green-600" />               </div>               <div>                 <h2 className="text-xl font-bold text-foreground">You're all set</h2>                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">                   ReportIQ will send your first alert at {alertTime} once your data source syncs.<br />                   Head to your dashboard to manage connectors and reports.                 </p>               </div>               <a                 href="/dashboard"                 className="w-full py-3 bg-foreground text-background rounded-xl text-sm font-medium flex items-center justify-center gap-2 hover:opacity-90"               >                 Go to dashboard <ArrowRight size={14} />               </a>             </div>           )}          </div>       </div>     </div>   ) }
+'use client'
+
+import { Suspense } from 'react'
+import { useState } from 'react'
+import { useSearchParams, useRouter } from 'next/navigation'
+import { Check, Zap, ArrowRight, Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export const dynamic = 'force-dynamic'
+
+type OnboardingStep = 'welcome' | 'org' | 'connector' | 'report' | 'alert' | 'done'
+
+const STEPS: Array<{ id: OnboardingStep; label: string }> = [
+  { id: 'welcome',   label: 'Welcome' },
+  { id: 'org',       label: 'Your org' },
+  { id: 'connector', label: 'Connect data' },
+  { id: 'report',    label: 'Pick report' },
+  { id: 'alert',     label: 'First alert' },
+]
+
+const TEMPLATES = [
+  { id: 'retail_distributor', emoji: '🏪', title: 'Retail & distribution', desc: 'Monitor sell-out, stock levels, and franchise performance across brands', connectors: ['gmail', 'google_sheets', 'tally'], reports: ['Retailer sell-out', 'Stock inventory', 'Target vs actual'] },
+  { id: 'ecommerce', emoji: '🛍️', title: 'E-commerce', desc: 'Track Shopify sales, inventory, returns, and fulfilment daily', connectors: ['shopify', 'stripe', 'gmail'], reports: ['Daily orders', 'Revenue', 'Returns'] },
+  { id: 'saas', emoji: '💻', title: 'SaaS business', desc: 'Monitor MRR, churn signals, support volume, and feature usage', connectors: ['stripe', 'hubspot', 'ga4'], reports: ['Revenue', 'Churn signals', 'Support tickets'] },
+  { id: 'custom', emoji: '⚙️', title: 'Set up manually', desc: 'Connect any data source and configure reports from scratch', connectors: [], reports: [] },
+]
+
+const ALERT_CHANNELS = [
+  { value: 'whatsapp', label: 'WhatsApp', desc: 'Best for instant alerts' },
+  { value: 'email',    label: 'Email',    desc: 'Good for digests' },
+  { value: 'slack',    label: 'Slack',    desc: 'Good for teams' },
+  { value: 'sms',      label: 'SMS',      desc: 'Most reliable' },
+]
+
+function OnboardingContent() {
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const plan = searchParams.get('plan') ?? 'growth'
+
+  const [step, setStep] = useState<OnboardingStep>('welcome')
+  const [orgName, setOrgName] = useState('')
+  const [industry, setIndustry] = useState('retail')
+  const [template, setTemplate] = useState<string | null>(null)
+  const [phone, setPhone] = useState('')
+  const [channel, setChannel] = useState('whatsapp')
+  const [alertTime, setAlertTime] = useState('08:00')
+  const [saving, setSaving] = useState(false)
+
+  const stepIndex = STEPS.findIndex(s => s.id === step)
+
+  const handleFinish = async () => {
+    setSaving(true)
+    await new Promise(r => setTimeout(r, 1200))
+    router.push('/dashboard')
+  }
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 24px', borderBottom: '1px solid #e5e7eb' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ width: 28, height: 28, borderRadius: 8, background: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Zap size={14} color="#fff" />
+          </div>
+          <span style={{ fontSize: 14, fontWeight: 600 }}>ReportIQ</span>
+        </div>
+        {step !== 'done' && (
+          <span style={{ fontSize: 12, color: '#6b7280' }}>Step {Math.max(stepIndex, 0) + 1} of {STEPS.length}</span>
+        )}
+      </div>
+
+      {step !== 'done' && (
+        <div style={{ height: 2, background: '#f3f4f6' }}>
+          <div style={{ height: '100%', background: '#111827', width: `${((stepIndex + 1) / STEPS.length) * 100}%`, transition: 'width 0.3s' }} />
+        </div>
+      )}
+
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '48px 16px' }}>
+        <div style={{ width: '100%', maxWidth: 560 }}>
+
+          {step === 'welcome' && (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ width: 64, height: 64, borderRadius: 16, background: '#111827', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+                <Zap size={28} color="#fff" />
+              </div>
+              <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8 }}>Welcome to ReportIQ</h1>
+              <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>
+                You are 10 minutes away from receiving your first plain-English business alert on WhatsApp.
+              </p>
+              <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 12, padding: 20, marginBottom: 24, textAlign: 'left' }}>
+                {[
+                  { icon: '🔌', text: 'Connect a data source — email, spreadsheet, database, or app' },
+                  { icon: '📊', text: 'Choose which reports to monitor and map your columns' },
+                  { icon: '📲', text: 'Get plain-English alerts with stats, red flags, and actions' },
+                ].map(item => (
+                  <div key={item.text} style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
+                    <span style={{ fontSize: 18 }}>{item.icon}</span>
+                    <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6 }}>{item.text}</p>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => setStep('org')} style={{ width: '100%', padding: '12px', background: '#111827', color: '#fff', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                Get started <ArrowRight size={14} />
+              </button>
+              <p style={{ marginTop: 12, fontSize: 12, color: '#9ca3af' }}>
+                You are on the <strong>{plan}</strong> plan — 14-day free trial, no credit card needed
+              </p>
+            </div>
+          )}
+
+          {step === 'org' && (
+            <div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Tell us about your business</h2>
+              <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 24 }}>This helps ReportIQ personalise your alerts</p>
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 500, marginBottom: 6 }}>Business name</label>
+                <input type="text" value={orgName} onChange={e => setOrgName(e.target.value)} placeholder="e.g. Ess Gee Group"
+                  style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none', boxSizing: 'border-box' }} />
+              </div>
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 500, marginBottom: 6 }}>Industry</label>
+                <select value={industry} onChange={e => setIndustry(e.target.value)}
+                  style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none' }}>
+                  <option value="retail">Retail and distribution</option>
+                  <option value="ecommerce">E-commerce</option>
+                  <option value="manufacturing">Manufacturing</option>
+                  <option value="saas">SaaS / software</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div style={{ marginBottom: 24 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 500, marginBottom: 10 }}>What do you want to monitor?</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  {TEMPLATES.map(t => (
+                    <button key={t.id} onClick={() => setTemplate(t.id)}
+                      style={{ padding: 12, border: template === t.id ? '2px solid #111827' : '1px solid #e5e7eb', borderRadius: 12, textAlign: 'left', cursor: 'pointer', background: '#fff' }}>
+                      <span style={{ fontSize: 20 }}>{t.emoji}</span>
+                      <p style={{ fontSize: 12, fontWeight: 500, marginTop: 6 }}>{t.title}</p>
+                      <p style={{ fontSize: 11, color: '#6b7280', marginTop: 2 }}>{t.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <button disabled={!orgName || !template} onClick={() => setStep('connector')}
+                style={{ width: '100%', padding: 10, background: !orgName || !template ? '#e5e7eb' : '#111827', color: !orgName || !template ? '#9ca3af' : '#fff', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 500, cursor: !orgName || !template ? 'not-allowed' : 'pointer' }}>
+                Continue
+              </button>
+            </div>
+          )}
+
+          {step === 'connector' && (
+            <div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Connect your first data source</h2>
+              <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 24 }}>Start with the source that has your most important reports</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+                {[
+                  { icon: '📧', label: 'Gmail / Outlook', desc: 'Pick up Excel and CSV reports from email attachments', href: '/dashboard/connectors/new' },
+                  { icon: '🗂️', label: 'Google Sheets', desc: 'Sync live from a shared spreadsheet', href: '/dashboard/connectors/new' },
+                  { icon: '🧾', label: 'Tally', desc: 'Connect directly to your Tally installation', href: '/dashboard/connectors/new' },
+                  { icon: '📊', label: 'Upload Excel / CSV', desc: 'Manually upload a report file to start', href: '/dashboard/connectors/new' },
+                ].map(option => (
+                  <a key={option.label} href={option.href}
+                    style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 14, border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: 'inherit', background: '#fff' }}>
+                    <span style={{ fontSize: 20 }}>{option.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: 14, fontWeight: 500 }}>{option.label}</p>
+                      <p style={{ fontSize: 12, color: '#6b7280' }}>{option.desc}</p>
+                    </div>
+                    <ArrowRight size={13} color="#9ca3af" />
+                  </a>
+                ))}
+              </div>
+              <button onClick={() => setStep('alert')} style={{ width: '100%', fontSize: 12, color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
+                Skip for now — connect later
+              </button>
+            </div>
+          )}
+
+          {step === 'report' && (
+            <div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Which report to monitor first?</h2>
+              <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 24 }}>Pick the one most important to your business today</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+                {[
+                  { icon: '📦', label: 'Stock / inventory', desc: 'Know when stock is low or sitting idle' },
+                  { icon: '🛍️', label: 'Retailer sell-out', desc: 'Track daily sales by store, brand, SKU' },
+                  { icon: '🎯', label: 'Target vs actual', desc: 'Get alerted when the team misses target' },
+                  { icon: '🚚', label: 'Dispatch and logistics', desc: 'Monitor orders shipped, pending, returned' },
+                  { icon: '↩️', label: 'Returns and defects', desc: 'Spot return rate spikes before they escalate' },
+                ].map(option => (
+                  <a key={option.label} href="/dashboard/reports/new"
+                    style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 14, border: '1px solid #e5e7eb', borderRadius: 12, textDecoration: 'none', color: 'inherit', background: '#fff' }}>
+                    <span style={{ fontSize: 20 }}>{option.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: 14, fontWeight: 500 }}>{option.label}</p>
+                      <p style={{ fontSize: 12, color: '#6b7280' }}>{option.desc}</p>
+                    </div>
+                    <ArrowRight size={13} color="#9ca3af" />
+                  </a>
+                ))}
+              </div>
+              <button onClick={() => setStep('alert')} style={{ width: '100%', fontSize: 12, color: '#6b7280', background: 'none', border: 'none', cursor: 'pointer', padding: 8 }}>
+                Skip — set up reports later
+              </button>
+            </div>
+          )}
+
+          {step === 'alert' && (
+            <div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Where should we send your alerts?</h2>
+              <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 24 }}>You can change this anytime</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+                {ALERT_CHANNELS.map(ch => (
+                  <button key={ch.value} onClick={() => setChannel(ch.value)}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 14, border: channel === ch.value ? '2px solid #111827' : '1px solid #e5e7eb', borderRadius: 12, background: '#fff', cursor: 'pointer', textAlign: 'left' }}>
+                    <div>
+                      <p style={{ fontSize: 14, fontWeight: 500 }}>{ch.label}</p>
+                      <p style={{ fontSize: 12, color: '#6b7280' }}>{ch.desc}</p>
+                    </div>
+                    <div style={{ width: 16, height: 16, borderRadius: '50%', border: channel === ch.value ? '5px solid #111827' : '2px solid #e5e7eb' }} />
+                  </button>
+                ))}
+              </div>
+              {(channel === 'whatsapp' || channel === 'sms') && (
+                <div style={{ marginBottom: 16 }}>
+                  <label style={{ display: 'block', fontSize: 12, fontWeight: 500, marginBottom: 6 }}>Your mobile number</label>
+                  <input type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="+91 98765 43210"
+                    style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none', boxSizing: 'border-box' }} />
+                </div>
+              )}
+              <div style={{ marginBottom: 24 }}>
+                <label style={{ display: 'block', fontSize: 12, fontWeight: 500, marginBottom: 6 }}>Send daily summary at</label>
+                <select value={alertTime} onChange={e => setAlertTime(e.target.value)}
+                  style={{ width: '100%', height: 40, padding: '0 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 14, outline: 'none' }}>
+                  {['06:00','07:00','08:00','09:00','10:00','18:00','19:00','20:00'].map(t => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
+              <button onClick={handleFinish} disabled={saving}
+                style={{ width: '100%', padding: 12, background: '#111827', color: '#fff', border: 'none', borderRadius: 12, fontSize: 14, fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: saving ? 0.7 : 1 }}>
+                {saving ? <><Loader2 size={14} /> Setting up your account...</> : <>Finish setup <ArrowRight size={14} /></>}
+              </button>
+            </div>
+          )}
+
+          {step === 'done' && (
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ width: 64, height: 64, borderRadius: '50%', background: '#f0fdf4', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+                <Check size={28} color="#16a34a" />
+              </div>
+              <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>You are all set</h2>
+              <p style={{ color: '#6b7280', fontSize: 14, marginBottom: 24, lineHeight: 1.6 }}>
+                ReportIQ will send your first alert at {alertTime} once your data source syncs.
+              </p>
+              <a href="/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', background: '#111827', color: '#fff', borderRadius: 12, fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>
+                Go to dashboard <ArrowRight size={14} />
+              </a>
+            </div>
+          )}
+
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: '#6b7280' }}>Loading...</div>}>
+      <OnboardingContent />
+    </Suspense>
+  )
+}
